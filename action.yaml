@@ -7,9 +7,12 @@ inputs:
   username:
     description: 'The ssh login user name'
     required: true
-  ssh_private_key:
-    description: 'The ssh private key, will be stored into .ssh/github_action'
-    requierd: true
+  password:
+    description: 'The ssh login password'
+    required: true
+  app_env_data:
+    description: 'The environment variable for application, will be written into .env file'
+    required: true
 
 runs:
   using: 'composite'
@@ -20,13 +23,13 @@ runs:
       with:
         php-version: '8.1'
         tools: composer:v2
+        extensions: ssh2
 
-    - name: deploy your application
+    - name: Deploy
+      env:
+        HOST: ${{ inputs.host }}
+        USERNAME: ${{ inputs.username }}
+        PASSWORD: ${{ inputs.password }}
+        APP_ENV_DATA: ${{ inputs.app_env_data }}
       shell: bash
-      run: |
-        mkdir ~/.ssh
-        touch ~/.ssh/github_action
-        echo '${{ inputs.ssh_private_key }}' >> ~/.ssh/github_action
-        cd ${{ github.workspace }}
-        composer require "laravel/envoy:^2.0"
-        cat Envoy.blade.php
+      run: php ${{ github.workspace }}/deploy.php
