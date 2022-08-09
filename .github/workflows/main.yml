@@ -1,0 +1,14 @@
+name: Deoloy
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: A Laravel deploy action example
+    steps:
+      - name: test
+        uses: yankewei/laravel-deploy-action@main
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}

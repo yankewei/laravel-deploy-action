@@ -1,0 +1,32 @@
+name: 'Laravel deploy action'
+description: 'Automatically deploy your Laravel application to remote server'
+inputs:
+  host: 
+    description: 'The remote server ip, support IPV4 only'
+    required: true
+  username:
+    description: 'The ssh login user name'
+    required: true
+  ssh_private_key:
+    description: 'The ssh private key, will be stored into .ssh/github_action'
+    requierd: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        tools: composer:v2
+
+    - name: deploy your application
+      shell: bash
+      run: |
+        mkdir ~/.ssh
+        touch ~/.ssh/github_action
+        echo '${{ inputs.ssh_private_key }}' >> ~/.ssh/github_action
+        cd ${{ github.workspace }}
+        composer require "laravel/envoy:^2.0"
+        cat Envoy.blade.php
