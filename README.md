@@ -4,7 +4,7 @@ Automatically deploy your Laravel app to remote server
 ### Step one
 Copy the `deploy.php` file to your application root path
 ### Step two
-You need to create four environments that we need to connect the remote server, then create your workflow like below
+You need to create four environments in your repo secrets, we need to connect the remote server
 ![github-action](./github-action.png)
 ### Write your workflow
 Below is a simple workflow, you can customize it but the environment in `with` parameter is required
